@@ -2,8 +2,8 @@
 
 @section('content')
     <div class="mb-12">
-        <h2 class="text-display-lg-mobile md:text-display-lg font-display-lg-mobile md:font-display-lg text-on-background mb-2">{{ __('Executive Summary') }}</h2>
-        <p class="text-body-lg font-body-lg text-on-surface-variant max-w-2xl">{{ __('Overview of institutional metrics and student academic performance for the current academic term.') }}</p>
+        <h2 class="text-display-lg-mobile md:text-display-lg font-display-lg-mobile md:font-display-lg text-on-background mb-2">{{ __('Data Summary') }}</h2>
+        <p class="text-body-lg font-body-lg text-on-surface-variant max-w-2xl">{{ __('Institutional data and student academic performance for this academic year.') }}</p>
         <div class="h-px w-full bg-outline-variant mt-8 relative">
             <div class="absolute top-1/2 -translate-y-1/2 left-0 w-24 h-0.5 bg-primary"></div>
         </div>
