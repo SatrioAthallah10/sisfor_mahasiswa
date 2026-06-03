@@ -9,6 +9,18 @@
         </a>
     </div>
 
+    @if (session('success'))
+        <div class="p-4 bg-primary-container text-on-primary-container border border-primary rounded-sm text-body-md font-body-md">
+            {{ session('success') }}
+        </div>
+    @endif
+
+    @if (session('error'))
+        <div class="p-4 bg-error-container text-on-error-container border border-error rounded-sm text-body-md font-body-md">
+            {{ session('error') }}
+        </div>
+    @endif
+
     <div class="border border-outline-variant bg-surface shadow-2xl relative overflow-hidden flex flex-col rounded">
         <div class="h-1 w-full bg-primary"></div>
         

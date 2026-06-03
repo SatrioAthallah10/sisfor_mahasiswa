@@ -56,7 +56,7 @@ class StudentController extends Controller
 
         Student::create($validated);
 
-        return redirect()->route('students.index')->with('success', 'Student created successfully.');
+        return redirect()->route('students.index')->with('success', __('Student created successfully.'));
     }
 
     public function show(string $id): View
@@ -83,7 +83,7 @@ class StudentController extends Controller
 
         $student->update($validated);
 
-        return redirect()->route('students.show', $student->id)->with('success', 'Student updated successfully.');
+        return redirect()->route('students.show', $student->id)->with('success', __('Student updated successfully.'));
     }
 
     public function destroy(string $id): RedirectResponse
@@ -91,7 +91,7 @@ class StudentController extends Controller
         $student = Student::findOrFail($id);
         $student->delete();
 
-        return redirect()->route('students.index')->with('success', 'Student deleted successfully.');
+        return redirect()->route('students.index')->with('success', __('Student deleted successfully.'));
     }
 
     private function handlePhotoUpload(Request $request, ?string $oldPath): ?string
