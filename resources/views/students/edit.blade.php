@@ -66,7 +66,7 @@
 
             @if ($student->photo_path)
                 <div class="flex items-center gap-4 bg-surface-container-low p-4 rounded border border-outline-variant">
-                    <img src="{{ $student->photo_url }}" class="w-16 h-16 object-cover rounded-full border border-outline grayscale opacity-90 mix-blend-multiply" alt="Current photo"/>
+                    <img src="{{ $student->photo_url }}" class="w-16 h-16 object-cover rounded-full border border-outline" alt="Current photo"/>
                     <div>
                         <p class="font-label-sm text-label-sm uppercase tracking-wider text-primary font-bold">{{ __('Current Profile Photo') }}</p>
                         <p class="font-body-md text-sm text-on-surface-variant mt-1">{{ __('Uploading a new photo below will replace this existing file.') }}</p>

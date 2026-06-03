@@ -96,7 +96,7 @@
                             <td class="py-4 px-6">
                                 <div class="w-10 h-10 rounded-full bg-secondary-container overflow-hidden border border-outline flex items-center justify-center">
                                     @if ($student->photo_path)
-                                        <img alt="Portrait photo" class="w-full h-full object-cover grayscale opacity-90 mix-blend-multiply" src="{{ $student->photo_url }}"/>
+                                        <img alt="Portrait photo" class="w-full h-full object-cover" src="{{ $student->photo_url }}"/>
                                     @else
                                         <span class="material-symbols-outlined text-secondary">person</span>
                                     @endif

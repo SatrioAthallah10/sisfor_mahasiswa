@@ -41,7 +41,7 @@
             <div class="flex flex-col md:flex-row gap-8 items-center md:items-start">
                 <div class="w-32 h-32 md:w-40 md:h-40 rounded bg-secondary-container overflow-hidden border border-outline flex items-center justify-center shrink-0 shadow-sm">
                     @if ($student->photo_path)
-                        <img alt="Portrait photo" class="w-full h-full object-cover grayscale opacity-90 mix-blend-multiply" src="{{ $student->photo_url }}"/>
+                        <img alt="Portrait photo" class="w-full h-full object-cover" src="{{ $student->photo_url }}"/>
                     @else
                         <span class="material-symbols-outlined text-6xl text-secondary">person</span>
                     @endif
