@@ -7,12 +7,6 @@ use Illuminate\Support\Facades\App;
 
 class LocaleController extends Controller
 {
-    /**
-     * Switch the application locale between English and Indonesian.
-     *
-     * @param string $locale
-     * @return RedirectResponse
-     */
     public function switch(string $locale): RedirectResponse
     {
         if (in_array($locale, ['en', 'id'])) {

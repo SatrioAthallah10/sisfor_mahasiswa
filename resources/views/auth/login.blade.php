@@ -1,31 +1,14 @@
-{{--
-  VARIABLES AVAILABLE:
-  None
-
-  ROUTES:
-  route('login.post')       — POST, submit login credentials
-  route('login')            — GET, show login page
-
-  FLASH MESSAGES:
-  session('success')        — success string
-  session('error')          — error string
-
-  FRONTEND NOTE: use {{ }} for all user data, never {!! !!}
---}}
-
 @extends('layouts.app')
 
 @section('content')
 <div class="w-full max-w-[500px] border border-outline-variant bg-surface p-10 md:p-16 relative">
     
-    <!-- Academic Crest / Identity -->
     <div class="flex flex-col items-center text-center mb-12">
         <span class="material-symbols-outlined text-[48px] text-primary mb-4" style="font-variation-settings: 'FILL' 0;">school</span>
         <div class="w-12 h-px bg-outline-variant my-4 mx-auto"></div>
         <h2 class="text-headline-md font-headline-md text-on-surface-variant">{{ __('Academic Portal') }}</h2>
     </div>
 
-    {{-- Error Notifications --}}
     @if ($errors->any())
         <div class="mb-8 p-4 bg-error-container text-on-error-container border border-error rounded-sm text-body-md font-body-md">
             <ul class="list-disc list-inside">
@@ -36,7 +19,6 @@
         </div>
     @endif
 
-    {{-- Success and Error Flash Notifications --}}
     @if (session('success'))
         <div class="mb-8 p-4 bg-primary-container text-on-primary-container border border-primary rounded-sm text-body-md font-body-md">
             {{ session('success') }}
@@ -49,7 +31,6 @@
         </div>
     @endif
 
-    <!-- Login Form -->
     <form action="{{ route('login.post') }}" class="flex flex-col gap-8" method="POST">
         @csrf
 

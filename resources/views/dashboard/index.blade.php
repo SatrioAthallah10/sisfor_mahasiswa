@@ -1,25 +1,6 @@
-{{--
-  VARIABLES AVAILABLE:
-  $totalStudents   — Total count of students (int)
-  $averageGpa      — Average GPA of all students rounded to 2 decimals (float/decimal)
-  $studentsByProdi — Collection of objects containing 'prodi' and 'total' keys
-
-  ROUTES:
-  route('dashboard')        — GET, refresh dashboard
-  route('students.index')   — GET, list page
-  route('logout')           — POST, logout (include @csrf)
-
-  FLASH MESSAGES:
-  session('success')        — success string
-  session('error')          — error string
-
-  FRONTEND NOTE: use {{ }} for all user data, never {!! !!}
---}}
-
 @extends('layouts.app')
 
 @section('content')
-    <!-- Header Section -->
     <div class="mb-12">
         <h2 class="text-display-lg-mobile md:text-display-lg font-display-lg-mobile md:font-display-lg text-on-background mb-2">{{ __('Executive Summary') }}</h2>
         <p class="text-body-lg font-body-lg text-on-surface-variant max-w-2xl">{{ __('Overview of institutional metrics and student academic performance for the current academic term.') }}</p>
@@ -28,7 +9,6 @@
         </div>
     </div>
 
-    {{-- Success and Error Flash Notifications --}}
     @if (session('success'))
         <div class="mb-8 p-4 bg-primary-container text-on-primary-container border border-primary rounded-sm text-body-md font-body-md">
             {{ session('success') }}
@@ -41,9 +21,7 @@
         </div>
     @endif
 
-    <!-- Summary Cards (Bento Style) -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-gutter mb-16">
-        <!-- Card 1: Total Enrollment -->
         <div class="border border-outline-variant p-8 bg-surface-container-lowest relative group hover:border-primary transition-colors duration-300 cursor-default">
             <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
                 <span class="material-symbols-outlined text-6xl" style="font-variation-settings: 'FILL' 1;">groups</span>
@@ -56,7 +34,6 @@
             </div>
         </div>
 
-        <!-- Card 2: Average GPA -->
         <div class="border border-outline-variant p-8 bg-surface-container-lowest relative group hover:border-primary transition-colors duration-300 cursor-default">
             <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
                 <span class="material-symbols-outlined text-6xl" style="font-variation-settings: 'FILL' 1;">school</span>
@@ -69,7 +46,6 @@
             </div>
         </div>
 
-        <!-- Card 3: Action Link -->
         <div class="border border-outline-variant p-8 bg-primary-container text-on-primary-container relative group hover:opacity-95 transition-opacity duration-300 cursor-default">
             <h3 class="text-headline-md font-headline-md mb-4 text-on-primary-container">{{ __('Quick Actions') }}</h3>
             <div class="text-display-lg font-display-lg text-white">{{ __('SIS Portal') }}</div>
@@ -83,9 +59,7 @@
         </div>
     </div>
 
-    <!-- Complex Section: Chart & Table -->
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-gutter">
-        <!-- Chart Area -->
         <div class="lg:col-span-1 border border-outline-variant bg-surface-container-lowest p-8 flex flex-col">
             <h3 class="text-headline-md font-headline-md text-on-background mb-8 pb-4 border-b border-outline-variant">{{ __('Program Distribution') }}</h3>
             
@@ -99,7 +73,6 @@
             </div>
         </div>
 
-        <!-- Program-Wise Student Table -->
         <div class="lg:col-span-2 border border-outline-variant bg-surface-container-lowest flex flex-col">
             <div class="p-8 pb-4 border-b border-outline-variant flex justify-between items-end">
                 <h3 class="text-headline-md font-headline-md text-on-background">{{ __('Study Program Enrollment') }}</h3>
@@ -133,7 +106,6 @@
         </div>
     </div>
 
-    {{-- Chart JSON Contract Data & Chart.js Library --}}
     <script id="prodi-data" type="application/json">@json($studentsByProdi)</script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>

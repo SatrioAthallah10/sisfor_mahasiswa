@@ -1,26 +1,6 @@
-{{--
-  VARIABLES AVAILABLE:
-  $students        — LengthAwarePaginator containing Student models
-
-  ROUTES:
-  route('students.index')   — GET, list page with filters
-  route('students.create')  — GET, show create form
-  route('students.show')    — GET, show student details
-  route('students.edit')    — GET, show edit form
-  route('students.destroy') — DELETE, soft delete student record
-  route('students.export')  — GET, export student list to CSV
-
-  FLASH MESSAGES:
-  session('success')        — success string
-  session('error')          — error string
-
-  FRONTEND NOTE: use {{ }} for all user data, never {!! !!}
---}}
-
 @extends('layouts.app')
 
 @section('content')
-    <!-- Page Header -->
     <div class="mb-12 flex flex-col md:flex-row justify-between items-start md:items-end gap-6">
         <div>
             <h2 class="font-display-lg text-display-lg text-on-surface mb-2">{{ __('Student Directory') }}</h2>
@@ -38,11 +18,9 @@
         </div>
     </div>
 
-    <!-- Double line divider -->
     <div class="w-full h-1 border-t-2 border-on-surface mb-1 relative"></div>
     <div class="w-full border-t border-outline-variant mb-8"></div>
 
-    {{-- Success and Error Flash Notifications --}}
     @if (session('success'))
         <div class="mb-8 p-4 bg-primary-container text-on-primary-container border border-primary rounded-sm text-body-md font-body-md">
             {{ session('success') }}
@@ -55,9 +33,7 @@
         </div>
     @endif
 
-    <!-- Toolbar / Filters -->
     <form action="{{ route('students.index') }}" method="GET" class="flex flex-col lg:flex-row gap-6 mb-8 bg-surface-container-low p-6 rounded border border-outline-variant">
-        <!-- Search input -->
         <div class="flex-grow relative">
             <label class="absolute -top-2 left-3 bg-surface-container-low px-1 font-label-sm text-label-sm uppercase tracking-wider text-secondary z-10" for="search">{{ __('Search') }}</label>
             <div class="relative flex items-center">
@@ -66,7 +42,6 @@
             </div>
         </div>
 
-        <!-- Filters select controls -->
         <div class="flex flex-wrap sm:flex-nowrap gap-4">
             <div class="relative min-w-[200px] flex-grow">
                 <label class="absolute -top-2 left-3 bg-surface-container-low px-1 font-label-sm text-label-sm uppercase tracking-wider text-secondary z-10" for="prodi">{{ __('Program Studi') }}</label>
@@ -102,7 +77,6 @@
         </div>
     </form>
 
-    <!-- Data Table -->
     <div class="bg-surface-container-lowest border border-outline-variant rounded overflow-hidden shadow-sm">
         <div class="overflow-x-auto">
             <table class="w-full text-left border-collapse min-w-[900px]">
@@ -121,7 +95,7 @@
                         <tr class="hover:bg-surface-container-low transition-colors group">
                             <td class="py-4 px-6">
                                 <div class="w-10 h-10 rounded-full bg-secondary-container overflow-hidden border border-outline flex items-center justify-center">
-                                    @if ($student->photo)
+                                    @if ($student->photo_path)
                                         <img alt="Portrait photo" class="w-full h-full object-cover grayscale opacity-90 mix-blend-multiply" src="{{ $student->photo_url }}"/>
                                     @else
                                         <span class="material-symbols-outlined text-secondary">person</span>
@@ -163,7 +137,6 @@
             </table>
         </div>
         
-        <!-- Pagination Links -->
         <div class="bg-surface-container p-4 border-t border-outline-variant flex flex-col sm:flex-row justify-between items-center gap-4">
             <p class="font-label-sm text-label-sm text-secondary uppercase tracking-wider">
                 {{ __('Showing') }} {{ $students->firstItem() ?? 0 }} - {{ $students->lastItem() ?? 0 }} {{ __('of') }} {{ $students->total() }} {{ __('entries') }}

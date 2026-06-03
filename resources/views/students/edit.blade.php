@@ -1,26 +1,9 @@
-{{--
-  VARIABLES AVAILABLE:
-  $student         — Student model instance being edited
-
-  ROUTES:
-  route('students.update')  — PUT, update student record
-  route('students.index')   — GET, list page
-
-  FLASH MESSAGES:
-  session('success')        — success string
-  session('error')          — error string
-
-  FRONTEND NOTE: use {{ }} for all user data, never {!! !!}
---}}
-
 @extends('layouts.app')
 
 @section('content')
 <div class="max-w-2xl mx-auto border border-outline-variant bg-surface shadow-2xl relative overflow-hidden flex flex-col rounded">
-    <!-- Subtle top border accent line -->
     <div class="h-1 w-full bg-primary"></div>
     
-    <!-- Header -->
     <div class="px-8 py-6 border-b border-outline-variant flex justify-between items-start bg-surface-bright shrink-0">
         <div>
             <h2 class="font-headline-md text-headline-md text-on-surface">{{ __('Edit Student Record') }}</h2>
@@ -31,7 +14,6 @@
         </a>
     </div>
 
-    {{-- Error Notifications --}}
     @if ($errors->any())
         <div class="mx-8 mt-8 p-4 bg-error-container text-on-error-container border border-error rounded-sm text-body-md font-body-md">
             <ul class="list-disc list-inside">
@@ -42,13 +24,11 @@
         </div>
     @endif
 
-    <!-- Body -->
     <div class="px-8 py-8 flex-1">
         <form action="{{ route('students.update', $student->id) }}" method="POST" enctype="multipart/form-data" class="flex flex-col gap-8">
             @csrf
             @method('PUT')
 
-            <!-- NIM & Name -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <div class="flex flex-col">
                     <label class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider mb-2" for="nim">{{ __('Student ID (NIM)') }}</label>
@@ -60,7 +40,6 @@
                 </div>
             </div>
 
-            <!-- Prodi & IPK -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <div class="flex flex-col relative">
                     <label class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider mb-2" for="prodi">{{ __('Study Program (Prodi)') }}</label>
@@ -78,7 +57,6 @@
                 </div>
             </div>
 
-            <!-- Double Line Divider (Classical Typesetting nod) -->
             <div class="w-full relative py-4">
                 <div class="absolute inset-0 flex items-center justify-center flex-col gap-[2px]">
                     <div class="w-full h-[1px] bg-outline-variant"></div>
@@ -86,8 +64,7 @@
                 </div>
             </div>
 
-            <!-- Current Photo Thumbnail -->
-            @if ($student->photo)
+            @if ($student->photo_path)
                 <div class="flex items-center gap-4 bg-surface-container-low p-4 rounded border border-outline-variant">
                     <img src="{{ $student->photo_url }}" class="w-16 h-16 object-cover rounded-full border border-outline grayscale opacity-90 mix-blend-multiply" alt="Current photo"/>
                     <div>
@@ -97,7 +74,6 @@
                 </div>
             @endif
 
-            <!-- Photo Upload -->
             <div class="flex flex-col">
                 <label class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider mb-4">{{ __('Replace Profile Photo (Optional)') }}</label>
                 <div class="border border-dashed border-outline-variant bg-surface-container-lowest hover:bg-surface-container-low transition-colors duration-300 p-8 flex flex-col items-center justify-center text-center cursor-pointer group relative">
@@ -111,7 +87,6 @@
                 </div>
             </div>
 
-            <!-- Form Footer -->
             <div class="pt-6 border-t border-outline-variant bg-surface-bright flex justify-end items-center gap-4 shrink-0">
                 <a href="{{ route('students.index') }}" class="px-6 py-2 border border-on-surface text-on-surface font-label-lg text-label-lg uppercase tracking-wider hover:bg-surface-variant transition-colors duration-300">
                     {{ __('Cancel') }}

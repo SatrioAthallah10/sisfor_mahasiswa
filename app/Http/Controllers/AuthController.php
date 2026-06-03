@@ -10,17 +10,11 @@ use Illuminate\View\View;
 
 class AuthController extends Controller
 {
-    /**
-     * Show the login form.
-     */
     public function showLogin(): View
     {
         return view('auth.login');
     }
 
-    /**
-     * Handle the authentication attempt.
-     */
     public function login(LoginRequest $request): RedirectResponse
     {
         $credentials = $request->only('email', 'password');
@@ -37,9 +31,6 @@ class AuthController extends Controller
         ])->onlyInput('email');
     }
 
-    /**
-     * Log the user out of the application.
-     */
     public function logout(Request $request): RedirectResponse
     {
         Auth::logout();

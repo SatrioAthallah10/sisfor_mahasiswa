@@ -3,18 +3,15 @@
 <head>
     <meta charset="utf-8"/>
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-    <title>{{ __('High Excellence Academy') }} - SIS</title>
+    <title>{{ __('portal akademik') }}</title>
     
-    {{-- Tailwind CSS & Plugins via CDN --}}
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     
-    {{-- Google Fonts --}}
     <link href="https://fonts.googleapis.com" rel="preconnect"/>
     <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
     <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,100..900;1,100..900&amp;family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&amp;display=swap" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
 
-    {{-- Tailwind Custom Config --}}
     <script id="tailwind-config">
         tailwind.config = {
             darkMode: "class",
@@ -109,28 +106,24 @@
     
     <style>
         .texture-bg {
-            background-color: #fdf8f5; /* surface */
+            background-color: #fdf8f5;
             background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.04'/%3E%3C/svg%3E");
         }
     </style>
 </head>
 
 @auth
-    {{-- AUTHENTICATED PANEL LAYOUT --}}
     <body class="bg-background text-on-background font-body-md min-h-screen flex texture-bg">
         
-        <!-- Sidebar Navigation -->
         <nav class="bg-surface-container-low docked left-0 h-full w-64 border-r border-outline-variant flat no shadows fixed left-0 top-0 h-full flex flex-col py-8 gap-4 hidden md:flex z-50">
             <div class="px-6 flex flex-col items-center mb-8">
                 <div class="w-16 h-16 rounded-full bg-surface-container-high mb-4 flex items-center justify-center overflow-hidden border border-outline-variant">
                     <span class="material-symbols-outlined text-primary text-3xl" style="font-variation-settings: 'FILL' 1;">account_balance</span>
                 </div>
                 <h1 class="text-headline-sm font-headline-sm text-primary uppercase tracking-widest text-center">{{ __('SIS Admin') }}</h1>
-                <p class="text-label-sm font-label-sm text-on-surface-variant text-center mt-1">{{ __('High Excellence Academy') }}</p>
             </div>
             
             <div class="flex-1 px-4 flex flex-col gap-2">
-                <!-- Navigation Items -->
                 <a href="{{ route('dashboard') }}" class="flex items-center gap-4 px-4 py-3 rounded-lg transition-all duration-300 ease-in-out cursor-pointer {{ Route::is('dashboard') ? 'text-primary font-bold border-r-4 border-primary bg-surface-bright shadow-sm' : 'text-on-surface-variant hover:text-on-surface hover:bg-tertiary-fixed' }}">
                     <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' {{ Route::is('dashboard') ? '1' : '0' }};">dashboard</span>
                     <span class="text-label-lg font-label-lg">{{ __('Dashboard') }}</span>
@@ -140,7 +133,6 @@
                     <span class="text-label-lg font-label-lg">{{ __('Student Directory') }}</span>
                 </a>
                 
-                <!-- Logout Form (Styled as Navigation Item) -->
                 <form action="{{ route('logout') }}" method="POST" class="mt-auto">
                     @csrf
                     <button type="submit" class="w-full text-left text-on-surface-variant hover:text-primary hover:bg-tertiary-fixed transition-all duration-300 flex items-center gap-4 px-4 py-3 rounded-lg ease-in-out">
@@ -151,10 +143,8 @@
             </div>
         </nav>
 
-        <!-- Main Content Area -->
         <main class="flex-1 md:ml-64 flex flex-col min-h-screen">
             
-            <!-- Mobile App Header -->
             <header class="md:hidden bg-background border-b border-outline-variant flex justify-between items-center w-full px-margin-mobile h-16 sticky top-0 z-40">
                 <h1 class="text-headline-md font-headline-md text-primary tracking-tight">{{ __('Academic Portal') }}</h1>
                 <div class="flex items-center gap-4">
@@ -168,11 +158,9 @@
                 </div>
             </header>
 
-            <!-- Desktop App Header -->
             <header class="hidden md:flex bg-background border-b border-outline-variant flex justify-between items-center w-full px-margin-desktop h-16 sticky top-0 z-40 bg-opacity-90 backdrop-blur-md">
                 <h1 class="text-headline-md font-headline-md text-primary tracking-tight">{{ __('Academic Portal') }}</h1>
                 <div class="flex items-center gap-6">
-                    <!-- Search on right -->
                     <div class="relative">
                         <form action="{{ route('students.index') }}" method="GET">
                             <input class="bg-transparent border-0 border-b border-outline-variant px-2 py-1 text-body-md font-body-md focus:outline-none focus:border-primary w-64 placeholder-on-surface-variant transition-colors" name="search" value="{{ request('search') }}" placeholder="{{ __('Search students...') }}" type="text"/>
@@ -180,14 +168,12 @@
                         </form>
                     </div>
 
-                    <!-- Language Switcher in Desktop Header -->
                     <div class="flex items-center gap-3 border-r border-outline-variant pr-6">
                         <a href="{{ route('lang.switch', 'en') }}" class="font-label-lg text-label-lg uppercase tracking-wider {{ App::getLocale() == 'en' ? 'text-primary font-bold border-b border-primary' : 'text-on-surface-variant hover:text-primary transition-colors' }}">EN</a>
                         <span class="text-outline-variant">/</span>
                         <a href="{{ route('lang.switch', 'id') }}" class="font-label-lg text-label-lg uppercase tracking-wider {{ App::getLocale() == 'id' ? 'text-primary font-bold border-b border-primary' : 'text-on-surface-variant hover:text-primary transition-colors' }}">ID</a>
                     </div>
 
-                    <!-- User metadata info -->
                     <div class="flex items-center gap-3">
                         <span class="text-body-md font-body-md text-on-surface-variant font-medium">{{ Auth::user()->name }}</span>
                         <span class="w-8 h-8 rounded-full bg-primary-fixed text-primary flex items-center justify-center font-bold text-sm uppercase tracking-wide border border-outline-variant">
@@ -197,16 +183,13 @@
                 </div>
             </header>
 
-            <!-- Content Canvas -->
             <div class="flex-1 p-margin-mobile md:p-margin-desktop overflow-y-auto">
                 @yield('content')
             </div>
         </main>
     </body>
 @else
-    {{-- GUEST / LOGIN LAYOUT --}}
     <body class="bg-background text-on-background min-h-screen flex flex-col relative texture-bg">
-        <!-- Floating Language Switcher for Guest/Login Screen -->
         <div class="absolute top-6 right-6 z-50 bg-surface border border-outline-variant px-4 py-2 flex gap-4 text-label-sm font-label-sm uppercase tracking-wider shadow-sm rounded">
             <a href="{{ route('lang.switch', 'en') }}" class="{{ App::getLocale() == 'en' ? 'text-primary font-bold underline decoration-primary underline-offset-4' : 'text-on-surface-variant hover:text-primary transition-colors' }}">🇬🇧 EN</a>
             <span class="text-outline-variant">|</span>

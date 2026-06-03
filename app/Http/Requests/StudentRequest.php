@@ -7,23 +7,13 @@ use Illuminate\Validation\Rule;
 
 class StudentRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     */
     public function authorize(): bool
     {
         return true;
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
-     */
     public function rules(): array
     {
-        // Get the student parameter from the route.
-        // It could be an ID string or a Student model instance depending on route binding.
         $student = $this->route('student');
         $studentId = is_object($student) ? $student->id : $student;
 

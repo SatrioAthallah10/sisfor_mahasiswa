@@ -7,9 +7,6 @@ use Illuminate\View\View;
 
 class DashboardController extends Controller
 {
-    /**
-     * Show the admin dashboard.
-     */
     public function index(): View
     {
         $totalStudents = Student::count();

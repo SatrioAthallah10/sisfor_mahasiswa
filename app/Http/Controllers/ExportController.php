@@ -7,9 +7,6 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class ExportController extends Controller
 {
-    /**
-     * Export all students data to a CSV file.
-     */
     public function export(): StreamedResponse
     {
         $headers = [
@@ -20,10 +17,8 @@ class ExportController extends Controller
         return response()->stream(function () {
             $handle = fopen('php://output', 'w');
             
-            // CSV Header Row
             fputcsv($handle, ['NIM', 'Name', 'Study Program', 'GPA', 'Photo', 'Created At']);
 
-            // Chunk records in batches of 200 to conserve memory
             Student::select('nim', 'name', 'prodi', 'gpa', 'photo_path', 'created_at')
                 ->chunk(200, function ($rows) use ($handle) {
                     foreach ($rows as $row) {

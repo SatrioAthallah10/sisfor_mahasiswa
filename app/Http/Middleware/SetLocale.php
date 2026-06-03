@@ -9,19 +9,12 @@ use Symfony\Component\HttpFoundation\Response;
 
 class SetLocale
 {
-    /**
-     * Handle an incoming request.
-     *
-     * @param  Request  $request
-     * @param  Closure  $next
-     * @return Response
-     */
     public function handle(Request $request, Closure $next): Response
     {
         if (session()->has('locale')) {
             App::setLocale(session()->get('locale'));
         } else {
-            App::setLocale('en'); // Default is English
+            App::setLocale('en');
         }
 
         return $next($request);
