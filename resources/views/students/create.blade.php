@@ -24,6 +24,12 @@
         </div>
     @endif
 
+    @if (session('error'))
+        <div class="mx-8 mt-8 p-4 bg-error-container text-on-error-container border border-error rounded-sm text-body-md font-body-md">
+            {{ session('error') }}
+        </div>
+    @endif
+
     <div class="px-8 py-8 flex-1">
         <form action="{{ route('students.store') }}" method="POST" enctype="multipart/form-data" class="flex flex-col gap-8">
             @csrf
@@ -65,14 +71,30 @@
 
             <div class="flex flex-col">
                 <label class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider mb-4">{{ __('Profile Photo Upload') }}</label>
-                <div class="border border-dashed border-outline-variant bg-surface-container-lowest hover:bg-surface-container-low transition-colors duration-300 p-8 flex flex-col items-center justify-center text-center cursor-pointer group relative">
+                <div class="border border-dashed border-outline-variant bg-surface-container-lowest hover:bg-surface-container-low transition-colors duration-300 p-8 flex flex-col items-center justify-center text-center cursor-pointer group relative" id="upload-area">
                     <input type="file" name="photo" id="photo" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" accept="image/*"/>
-                    <div class="w-12 h-12 rounded-full bg-surface-variant flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
-                        <span class="material-symbols-outlined text-on-surface-variant">cloud_upload</span>
+                    <div id="upload-content">
+                        <div class="w-12 h-12 rounded-full bg-surface-variant flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
+                            <span class="material-symbols-outlined text-on-surface-variant">cloud_upload</span>
+                        </div>
+                        <p class="font-body-md text-body-md text-on-surface mb-1">{{ __('Click or drag student portrait here') }}</p>
+                        <p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">{{ __('to upload image file') }}</p>
+                        <p class="font-label-sm text-label-sm text-on-surface-variant mt-4 opacity-70">{{ __('Max size 2MB. Accepted formats: JPG, PNG.') }}</p>
                     </div>
-                    <p class="font-body-md text-body-md text-on-surface mb-1">{{ __('Click or drag student portrait here') }}</p>
-                    <p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">{{ __('to upload image file') }}</p>
-                    <p class="font-label-sm text-label-sm text-on-surface-variant mt-4 opacity-70">{{ __('Max size 2MB. Accepted formats: JPG, PNG.') }}</p>
+                    <div id="upload-preview" class="hidden flex flex-col items-center justify-center text-center">
+                        <img id="preview-image" src="" alt="Preview" class="w-32 h-32 object-cover rounded-lg mb-4 border border-outline mx-auto"/>
+                        <p class="font-body-md text-body-md text-primary font-semibold mb-2">{{ __('Preview:') }}</p>
+                        <p id="file-name" class="font-body-sm text-body-sm text-on-surface-variant"></p>
+                        <p class="font-label-sm text-label-sm text-on-surface-variant mt-2 opacity-70">{{ __('Click to change file') }}</p>
+                    </div>
+                    <div id="upload-loading" class="hidden flex flex-col items-center gap-3">
+                        <div class="w-10 h-10 border-4 border-outline-variant border-t-primary rounded-full animate-spin"></div>
+                        <p class="font-body-md text-body-md text-on-surface">{{ __('Uploading...') }}</p>
+                    </div>
+                </div>
+                <div id="upload-error" class="hidden mt-4 p-3 bg-error-container text-on-error-container border border-error rounded-sm text-body-sm font-body-sm flex items-center gap-2">
+                    <span class="material-symbols-outlined text-sm">error</span>
+                    <span id="upload-error-text"></span>
                 </div>
             </div>
 
@@ -87,4 +109,88 @@
         </form>
     </div>
 </div>
+
+<script>
+    const photoInput = document.getElementById('photo');
+    const uploadArea = document.getElementById('upload-area');
+    const uploadContent = document.getElementById('upload-content');
+    const uploadPreview = document.getElementById('upload-preview');
+    const uploadLoading = document.getElementById('upload-loading');
+    const previewImage = document.getElementById('preview-image');
+    const fileName = document.getElementById('file-name');
+    const uploadError = document.getElementById('upload-error');
+    const uploadErrorText = document.getElementById('upload-error-text');
+
+    // Handle file selection
+    photoInput.addEventListener('change', handleFileSelect);
+
+    // Drag and drop
+    uploadArea.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        uploadArea.classList.add('border-primary', 'bg-primary-container');
+    });
+
+    uploadArea.addEventListener('dragleave', () => {
+        uploadArea.classList.remove('border-primary', 'bg-primary-container');
+    });
+
+    uploadArea.addEventListener('drop', (e) => {
+        e.preventDefault();
+        uploadArea.classList.remove('border-primary', 'bg-primary-container');
+        const files = e.dataTransfer.files;
+        if (files.length > 0) {
+            photoInput.files = files;
+            handleFileSelect();
+        }
+    });
+
+    function handleFileSelect() {
+        const file = photoInput.files[0];
+        if (!file) return;
+
+        // Validate file type
+        if (!file.type.startsWith('image/')) {
+            showUploadError('{{ __("Please select an image file") }}');
+            photoInput.value = '';
+            return;
+        }
+
+        // Validate file size (2MB max)
+        if (file.size > 2048 * 1024) {
+            showUploadError('{{ __("File size must not exceed 2MB") }}');
+            photoInput.value = '';
+            return;
+        }
+
+        // Show preview
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            previewImage.src = e.target.result;
+            fileName.textContent = file.name + ' (' + (file.size / 1024).toFixed(2) + ' KB)';
+            uploadContent.classList.add('hidden');
+            uploadPreview.classList.remove('hidden');
+            uploadError.classList.add('hidden');
+        };
+        reader.readAsDataURL(file);
+    }
+
+    function showUploadError(message) {
+        uploadErrorText.textContent = message;
+        uploadError.classList.remove('hidden');
+        uploadLoading.classList.add('hidden');
+        uploadPreview.classList.add('hidden');
+        uploadContent.classList.remove('hidden');
+    }
+
+    // Handle form submission
+    const form = document.querySelector('form');
+    form.addEventListener('submit', function() {
+        if (photoInput.files.length > 0) {
+            uploadError.classList.add('hidden');
+            uploadContent.classList.add('hidden');
+            uploadPreview.classList.add('hidden');
+            uploadLoading.classList.remove('hidden');
+        }
+    });
+</script>
 @endsection
