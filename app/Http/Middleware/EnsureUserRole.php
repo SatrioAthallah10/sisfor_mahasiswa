@@ -8,9 +8,9 @@ use Illuminate\Support\Facades\Auth;
 
 class EnsureUserRole
 {
-    public function handle(Request $request, Closure $next, string $role)
+    public function handle(Request $request, Closure $next, string ...$roles)
     {
-        if (! Auth::check() || Auth::user()->role !== $role) {
+        if (! Auth::check() || ! in_array(Auth::user()->role, $roles)) {
             abort(403, 'Unauthorized.');
         }
 

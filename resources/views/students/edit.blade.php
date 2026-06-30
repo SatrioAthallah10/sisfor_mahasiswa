@@ -47,6 +47,17 @@
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="flex flex-col">
+                    <label class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider mb-2" for="email">{{ __('Email Address') }}</label>
+                    <input class="bg-transparent border-0 border-b border-outline-variant focus:border-on-surface focus:ring-0 px-0 py-2 font-body-lg text-body-lg text-on-surface placeholder:text-on-surface-variant/40 transition-colors" id="email" name="email" value="{{ old('email', optional($student->user)->email) }}" placeholder="e.g. student@example.com" type="email" required/>
+                </div>
+                <div class="flex flex-col">
+                    <label class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider mb-2" for="password">{{ __('Password') }}</label>
+                    <input class="bg-transparent border-0 border-b border-outline-variant focus:border-on-surface focus:ring-0 px-0 py-2 font-body-lg text-body-lg text-on-surface placeholder:text-on-surface-variant/40 transition-colors" id="password" name="password" placeholder="{{ __('Leave blank to keep current password') }}" type="password"/>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <div class="flex flex-col relative">
                     <label class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider mb-2" for="prodi">{{ __('Study Program (Prodi)') }}</label>
                     <select class="appearance-none bg-transparent bg-none border-0 border-b border-outline-variant focus:border-on-surface focus:ring-0 px-0 py-2 font-body-lg text-body-lg text-on-surface transition-colors cursor-pointer pr-8" id="prodi" name="prodi" required>

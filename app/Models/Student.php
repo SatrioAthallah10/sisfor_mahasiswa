@@ -16,6 +16,7 @@ class Student extends Model
         'prodi',
         'gpa',
         'photo_path',
+        'user_id',
     ];
 
     protected $casts = [
@@ -25,5 +26,10 @@ class Student extends Model
     public function getPhotoUrlAttribute(): ?string
     {
         return $this->photo_path ? asset('storage/'.$this->photo_path) : null;
+    }
+
+    public function user(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo(User::class);
     }
 }

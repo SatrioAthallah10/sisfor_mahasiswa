@@ -16,6 +16,8 @@ class StudentRequest extends FormRequest
     {
         $student = $this->route('student');
         $studentId = is_object($student) ? $student->id : $student;
+        $studentModel = $studentId ? \App\Models\Student::find($studentId) : null;
+        $userId = $studentModel ? $studentModel->user_id : null;
 
         return [
             'nim' => [
@@ -28,6 +30,13 @@ class StudentRequest extends FormRequest
             'prodi' => 'required|string|max:100',
             'gpa' => 'required|numeric|min:0|max:4',
             'photo' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+            'email' => [
+                'required',
+                'email',
+                'max:255',
+                Rule::unique('users', 'email')->ignore($userId),
+            ],
+            'password' => $studentId ? 'nullable|string|min:6' : 'required|string|min:6',
         ];
     }
 

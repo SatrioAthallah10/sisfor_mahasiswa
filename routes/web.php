@@ -35,9 +35,26 @@ Route::get('/dashboard', function () {
     return app(\App\Http\Controllers\DashboardController::class)->index();
 })->name('dashboard')->middleware('auth');
 
-Route::get('/students/export', [ExportController::class, 'export'])->name('students.export')->middleware('auth');
+Route::get('/students/export', [ExportController::class, 'export'])->name('students.export')->middleware(['auth', 'role:admin']);
 
-Route::resource('students', StudentController::class)->middleware('auth');
+Route::middleware(['auth', 'role:admin,dosen'])->group(function () {
+    Route::get('/students', [StudentController::class, 'index'])->name('students.index');
+    Route::get('/students/{student}', [StudentController::class, 'show'])->name('students.show');
+});
+
+Route::middleware(['auth', 'role:admin'])->group(function () {
+    Route::get('/students/create', [StudentController::class, 'create'])->name('students.create');
+    Route::post('/students', [StudentController::class, 'store'])->name('students.store');
+    Route::get('/students/{student}/edit', [StudentController::class, 'edit'])->name('students.edit');
+    Route::put('/students/{student}', [StudentController::class, 'update'])->name('students.update');
+    Route::delete('/students/{student}', [StudentController::class, 'destroy'])->name('students.destroy');
+});
+
+// Admin management routes
+Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
+    Route::resource('lecturers', \App\Http\Controllers\LecturerController::class);
+    Route::resource('courses', \App\Http\Controllers\CourseController::class);
+});
 
 // Student portal routes (Mahasiswa)
 Route::prefix('student')->name('student.')->middleware('auth')->group(function () {

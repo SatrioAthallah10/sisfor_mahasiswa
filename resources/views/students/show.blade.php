@@ -29,12 +29,14 @@
                 <h2 class="font-headline-md text-headline-md text-on-surface">{{ __('Academic Profile') }}</h2>
                 <p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest mt-2">{{ __('Verified Institutional Record') }}</p>
             </div>
+            @if(Auth::user()->role === 'admin')
             <div class="flex gap-2">
                 <a href="{{ route('students.edit', $student->id) }}" class="px-4 py-2 border border-outline-variant text-on-surface font-label-sm text-label-sm uppercase tracking-wider rounded flex items-center gap-2 hover:border-on-surface transition-colors">
                     <span class="material-symbols-outlined text-sm">edit</span>
                     {{ __('Edit Record') }}
                 </a>
             </div>
+            @endif
         </div>
 
         <div class="px-8 py-8 flex flex-col gap-8">
@@ -69,9 +71,15 @@
                         </div>
                     </div>
 
-                    <div>
-                        <span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">{{ __('Study Program (Prodi)') }}</span>
-                        <p class="font-body-lg text-body-lg text-on-surface mt-1">{{ $student->prodi }}</p>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                        <div>
+                            <span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">{{ __('Study Program (Prodi)') }}</span>
+                            <p class="font-body-lg text-body-lg text-on-surface mt-1">{{ $student->prodi }}</p>
+                        </div>
+                        <div>
+                            <span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">{{ __('Email Address') }}</span>
+                            <p class="font-body-lg text-body-lg text-on-surface mt-1 font-mono text-sm tracking-tight">{{ optional($student->user)->email ?? '-' }}</p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -95,7 +103,7 @@
             </div>
         </div>
 
-        <div class="px-8 py-6 border-t border-outline-variant bg-surface-bright flex justify-between items-center shrink-0">
+            @if(Auth::user()->role === 'admin')
             <form action="{{ route('students.destroy', $student->id) }}" method="POST" onsubmit="return confirm('{{ __('Are you sure you want to soft delete this student record?') }}');">
                 @csrf
                 @method('DELETE')
@@ -104,6 +112,9 @@
                     {{ __('Delete Record') }}
                 </button>
             </form>
+            @else
+            <div></div>
+            @endif
             <a href="{{ route('students.index') }}" class="px-6 py-2 bg-on-surface text-surface border border-on-surface font-label-lg text-label-lg uppercase tracking-wider hover:bg-primary hover:border-primary hover:text-on-primary transition-all duration-300">
                 {{ __('Close') }}
             </a>

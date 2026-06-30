@@ -14,6 +14,7 @@ return new class extends Migration
             $table->timestamp('open_at')->nullable();
             $table->timestamp('close_at')->nullable();
             $table->foreignId('created_by')->nullable()->constrained('users')->nullOnDelete();
+            $table->foreignId('course_id')->nullable()->constrained('courses')->cascadeOnDelete();
             $table->timestamps();
         });
 

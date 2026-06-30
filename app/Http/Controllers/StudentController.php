@@ -4,8 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StudentRequest;
 use App\Models\Student;
+use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
@@ -54,7 +57,17 @@ class StudentController extends Controller
         $photoPath = $this->handlePhotoUpload($request, null);
         $validated['photo_path'] = $photoPath;
 
-        Student::create($validated);
+        DB::transaction(function () use ($validated) {
+            $user = User::create([
+                'name' => $validated['name'],
+                'email' => $validated['email'],
+                'password' => Hash::make($validated['password']),
+                'role' => 'student',
+            ]);
+
+            $validated['user_id'] = $user->id;
+            Student::create($validated);
+        });
 
         return redirect()->route('students.index')->with('success', __('Student created successfully.'));
     }
@@ -84,7 +97,19 @@ class StudentController extends Controller
             return redirect()->back()->withInput()->with('error', __('Photo upload failed. Please try again.'));
         }
 
-        $student->update($validated);
+        DB::transaction(function () use ($student, $validated) {
+            $student->update($validated);
+
+            $user = $student->user;
+            if ($user) {
+                $user->name = $validated['name'];
+                $user->email = $validated['email'];
+                if (!empty($validated['password'])) {
+                    $user->password = Hash::make($validated['password']);
+                }
+                $user->save();
+            }
+        });
 
         return redirect()->route('students.show', $student->id)->with('success', __('Student updated successfully.'));
     }
@@ -92,7 +117,14 @@ class StudentController extends Controller
     public function destroy(string $id): RedirectResponse
     {
         $student = Student::findOrFail($id);
-        $student->delete();
+        
+        DB::transaction(function () use ($student) {
+            $user = $student->user;
+            $student->delete();
+            if ($user) {
+                $user->delete();
+            }
+        });
 
         return redirect()->route('students.index')->with('success', __('Student deleted successfully.'));
     }
@@ -104,6 +136,7 @@ class StudentController extends Controller
         }
 
         $filename = Str::uuid().'.'.$request->file('photo')->getClientOriginalExtension();
+        $path = $request->file('photo')->storeAs('photos', $filename, 'public');
 
         if (!$path) {
             throw new \RuntimeException('Failed to store uploaded photo.');

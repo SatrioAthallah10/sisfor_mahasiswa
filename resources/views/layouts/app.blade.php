@@ -121,7 +121,15 @@
                 <div class="w-16 h-16 rounded-full bg-surface-container-high mb-4 flex items-center justify-center overflow-hidden border border-outline-variant">
                     <span class="material-symbols-outlined text-primary text-3xl" style="font-variation-settings: 'FILL' 1;">account_balance</span>
                 </div>
-                <h1 class="text-headline-sm font-headline-sm text-primary uppercase tracking-widest text-center">{{ Auth::user()->role === 'student' ? __('SIS Student') : __('SIS Admin') }}</h1>
+                <h1 class="text-headline-sm font-headline-sm text-primary uppercase tracking-widest text-center">
+                    @if(Auth::user()->role === 'student')
+                        {{ __('SIS Student') }}
+                    @elseif(Auth::user()->role === 'dosen')
+                        {{ __('SIS Lecturer') }}
+                    @else
+                        {{ __('SIS Admin') }}
+                    @endif
+                </h1>
             </div>
             
             <div class="flex-1 px-4 flex flex-col gap-2">
@@ -142,7 +150,7 @@
                         <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' {{ Route::is('student.profile.*') ? '1' : '0' }};">person</span>
                         <span class="text-label-lg font-label-lg">{{ __('Profile') }}</span>
                     </a>
-                @else
+                @elseif(Auth::user()->role === 'dosen')
                     <a href="{{ route('dashboard') }}" class="flex items-center gap-4 px-4 py-3 rounded-lg transition-all duration-300 ease-in-out cursor-pointer {{ Route::is('dashboard') ? 'text-primary font-bold border-r-4 border-primary bg-surface-bright shadow-sm' : 'text-on-surface-variant hover:text-on-surface hover:bg-tertiary-fixed' }}">
                         <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' {{ Route::is('dashboard') ? '1' : '0' }};">dashboard</span>
                         <span class="text-label-lg font-label-lg">{{ __('Dashboard') }}</span>
@@ -150,6 +158,23 @@
                     <a href="{{ route('students.index') }}" class="flex items-center gap-4 px-4 py-3 rounded-lg transition-all duration-300 ease-in-out cursor-pointer {{ Route::is('students.*') ? 'text-primary font-bold border-r-4 border-primary bg-surface-bright shadow-sm' : 'text-on-surface-variant hover:text-on-surface hover:bg-tertiary-fixed' }}">
                         <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' {{ Route::is('students.*') ? '1' : '0' }};">school</span>
                         <span class="text-label-lg font-label-lg">{{ __('Student Directory') }}</span>
+                    </a>
+                @else
+                    <a href="{{ route('dashboard') }}" class="flex items-center gap-4 px-4 py-3 rounded-lg transition-all duration-300 ease-in-out cursor-pointer {{ Route::is('dashboard') ? 'text-primary font-bold border-r-4 border-primary bg-surface-bright shadow-sm' : 'text-on-surface-variant hover:text-on-surface hover:bg-tertiary-fixed' }}">
+                        <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' {{ Route::is('dashboard') ? '1' : '0' }};">dashboard</span>
+                        <span class="text-label-lg font-label-lg">{{ __('Dashboard') }}</span>
+                    </a>
+                    <a href="{{ route('courses.index') }}" class="flex items-center gap-4 px-4 py-3 rounded-lg transition-all duration-300 ease-in-out cursor-pointer {{ Route::is('courses.*') ? 'text-primary font-bold border-r-4 border-primary bg-surface-bright shadow-sm' : 'text-on-surface-variant hover:text-on-surface hover:bg-tertiary-fixed' }}">
+                        <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' {{ Route::is('courses.*') ? '1' : '0' }};">menu_book</span>
+                        <span class="text-label-lg font-label-lg">{{ __('Course Management') }}</span>
+                    </a>
+                    <a href="{{ route('students.index') }}" class="flex items-center gap-4 px-4 py-3 rounded-lg transition-all duration-300 ease-in-out cursor-pointer {{ Route::is('students.*') ? 'text-primary font-bold border-r-4 border-primary bg-surface-bright shadow-sm' : 'text-on-surface-variant hover:text-on-surface hover:bg-tertiary-fixed' }}">
+                        <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' {{ Route::is('students.*') ? '1' : '0' }};">school</span>
+                        <span class="text-label-lg font-label-lg">{{ __('Student Directory') }}</span>
+                    </a>
+                    <a href="{{ route('lecturers.index') }}" class="flex items-center gap-4 px-4 py-3 rounded-lg transition-all duration-300 ease-in-out cursor-pointer {{ Route::is('lecturers.*') ? 'text-primary font-bold border-r-4 border-primary bg-surface-bright shadow-sm' : 'text-on-surface-variant hover:text-on-surface hover:bg-tertiary-fixed' }}">
+                        <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' {{ Route::is('lecturers.*') ? '1' : '0' }};">supervisor_account</span>
+                        <span class="text-label-lg font-label-lg">{{ __('Lecturer Directory') }}</span>
                     </a>
                 @endif
                 

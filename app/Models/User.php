@@ -36,4 +36,14 @@ class User extends Authenticatable
     {
         return $this->role === 'dosen';
     }
+
+    public function student(): \Illuminate\Database\Eloquent\Relations\HasOne
+    {
+        return $this->hasOne(Student::class);
+    }
+
+    public function courses(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Course::class, 'lecturer_id');
+    }
 }

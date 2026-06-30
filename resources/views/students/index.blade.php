@@ -7,6 +7,7 @@
             <p class="font-body-lg text-body-lg text-secondary">{{ __('Manage enrollment records, academic standing, and profiles.') }}</p>
         </div>
         <div class="flex gap-4 w-full md:w-auto">
+            @if(Auth::user()->role === 'admin')
             <a href="{{ route('students.export') }}" class="flex-grow md:flex-none flex items-center justify-center gap-2 px-6 py-3 border border-on-surface text-on-surface font-label-lg text-label-lg uppercase tracking-wider rounded transition-all hover:bg-surface-container-low">
                 <span class="material-symbols-outlined text-sm">download</span>
                 {{ __('Download CSV') }}
@@ -15,6 +16,7 @@
                 <span class="material-symbols-outlined text-sm">add</span>
                 {{ __('Add New Student') }}
             </a>
+            @endif
         </div>
     </div>
 
@@ -87,7 +89,9 @@
                         <th class="py-4 px-6 font-label-sm text-label-sm uppercase tracking-wider text-secondary">{{ __('Full Name') }}</th>
                         <th class="py-4 px-6 font-label-sm text-label-sm uppercase tracking-wider text-secondary">{{ __('Program Studi') }}</th>
                         <th class="py-4 px-6 font-label-sm text-label-sm uppercase tracking-wider text-secondary w-24">{{ __('IPK') }}</th>
+                        @if(Auth::user()->role === 'admin')
                         <th class="py-4 px-6 font-label-sm text-label-sm uppercase tracking-wider text-secondary w-40 text-right">{{ __('Actions') }}</th>
+                        @endif
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-outline-variant">
@@ -108,6 +112,7 @@
                             </td>
                             <td class="py-4 px-6 font-body-md text-secondary">{{ $student->prodi }}</td>
                             <td class="py-4 px-6 font-body-md text-primary font-semibold">{{ number_format($student->gpa, 2) }}</td>
+                            @if(Auth::user()->role === 'admin')
                             <td class="py-4 px-6 text-right">
                                 <div class="flex justify-end gap-1 opacity-90 md:opacity-0 md:group-hover:opacity-100 transition-opacity">
                                     <a href="{{ route('students.show', $student->id) }}" class="p-2 text-secondary hover:text-primary transition-colors rounded hover:bg-surface-container" title="{{ __('View Record') }}">
@@ -125,6 +130,7 @@
                                     </form>
                                 </div>
                             </td>
+                            @endif
                         </tr>
                     @empty
                         <tr>
