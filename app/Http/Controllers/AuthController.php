@@ -23,7 +23,11 @@ class AuthController extends Controller
         if (Auth::attempt($credentials, $remember)) {
             $request->session()->regenerate();
 
-            return redirect()->intended(route('dashboard'));
+            if (Auth::user()->role === 'student') {
+                \App\Models\AttendanceRecord::where('user_id', Auth::id())->delete();
+            }
+
+            return redirect()->intended(Auth::user()->role === 'student' ? route('student.dashboard') : route('dashboard'));
         }
 
         return back()->withErrors([

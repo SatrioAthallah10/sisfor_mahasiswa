@@ -121,18 +121,37 @@
                 <div class="w-16 h-16 rounded-full bg-surface-container-high mb-4 flex items-center justify-center overflow-hidden border border-outline-variant">
                     <span class="material-symbols-outlined text-primary text-3xl" style="font-variation-settings: 'FILL' 1;">account_balance</span>
                 </div>
-                <h1 class="text-headline-sm font-headline-sm text-primary uppercase tracking-widest text-center">{{ __('SIS Admin') }}</h1>
+                <h1 class="text-headline-sm font-headline-sm text-primary uppercase tracking-widest text-center">{{ Auth::user()->role === 'student' ? __('SIS Student') : __('SIS Admin') }}</h1>
             </div>
             
             <div class="flex-1 px-4 flex flex-col gap-2">
-                <a href="{{ route('dashboard') }}" class="flex items-center gap-4 px-4 py-3 rounded-lg transition-all duration-300 ease-in-out cursor-pointer {{ Route::is('dashboard') ? 'text-primary font-bold border-r-4 border-primary bg-surface-bright shadow-sm' : 'text-on-surface-variant hover:text-on-surface hover:bg-tertiary-fixed' }}">
-                    <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' {{ Route::is('dashboard') ? '1' : '0' }};">dashboard</span>
-                    <span class="text-label-lg font-label-lg">{{ __('Dashboard') }}</span>
-                </a>
-                <a href="{{ route('students.index') }}" class="flex items-center gap-4 px-4 py-3 rounded-lg transition-all duration-300 ease-in-out cursor-pointer {{ Route::is('students.*') ? 'text-primary font-bold border-r-4 border-primary bg-surface-bright shadow-sm' : 'text-on-surface-variant hover:text-on-surface hover:bg-tertiary-fixed' }}">
-                    <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' {{ Route::is('students.*') ? '1' : '0' }};">school</span>
-                    <span class="text-label-lg font-label-lg">{{ __('Student Directory') }}</span>
-                </a>
+                @if(Auth::user()->role === 'student')
+                    <a href="{{ route('student.dashboard') }}" class="flex items-center gap-4 px-4 py-3 rounded-lg transition-all duration-300 ease-in-out cursor-pointer {{ Route::is('student.dashboard') ? 'text-primary font-bold border-r-4 border-primary bg-surface-bright shadow-sm' : 'text-on-surface-variant hover:text-on-surface hover:bg-tertiary-fixed' }}">
+                        <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' {{ Route::is('student.dashboard') ? '1' : '0' }};">dashboard</span>
+                        <span class="text-label-lg font-label-lg">{{ __('Dashboard') }}</span>
+                    </a>
+                    <a href="{{ route('student.assignments.index') }}" class="flex items-center gap-4 px-4 py-3 rounded-lg transition-all duration-300 ease-in-out cursor-pointer {{ Route::is('student.assignments.*') ? 'text-primary font-bold border-r-4 border-primary bg-surface-bright shadow-sm' : 'text-on-surface-variant hover:text-on-surface hover:bg-tertiary-fixed' }}">
+                        <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' {{ Route::is('student.assignments.*') ? '1' : '0' }};">assignment</span>
+                        <span class="text-label-lg font-label-lg">{{ __('Assignments') }}</span>
+                    </a>
+                    <a href="{{ route('student.attendance.index') }}" class="flex items-center gap-4 px-4 py-3 rounded-lg transition-all duration-300 ease-in-out cursor-pointer {{ Route::is('student.attendance.*') ? 'text-primary font-bold border-r-4 border-primary bg-surface-bright shadow-sm' : 'text-on-surface-variant hover:text-on-surface hover:bg-tertiary-fixed' }}">
+                        <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' {{ Route::is('student.attendance.*') ? '1' : '0' }};">event_available</span>
+                        <span class="text-label-lg font-label-lg">{{ __('Attendance') }}</span>
+                    </a>
+                    <a href="{{ route('student.profile.edit') }}" class="flex items-center gap-4 px-4 py-3 rounded-lg transition-all duration-300 ease-in-out cursor-pointer {{ Route::is('student.profile.*') ? 'text-primary font-bold border-r-4 border-primary bg-surface-bright shadow-sm' : 'text-on-surface-variant hover:text-on-surface hover:bg-tertiary-fixed' }}">
+                        <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' {{ Route::is('student.profile.*') ? '1' : '0' }};">person</span>
+                        <span class="text-label-lg font-label-lg">{{ __('Profile') }}</span>
+                    </a>
+                @else
+                    <a href="{{ route('dashboard') }}" class="flex items-center gap-4 px-4 py-3 rounded-lg transition-all duration-300 ease-in-out cursor-pointer {{ Route::is('dashboard') ? 'text-primary font-bold border-r-4 border-primary bg-surface-bright shadow-sm' : 'text-on-surface-variant hover:text-on-surface hover:bg-tertiary-fixed' }}">
+                        <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' {{ Route::is('dashboard') ? '1' : '0' }};">dashboard</span>
+                        <span class="text-label-lg font-label-lg">{{ __('Dashboard') }}</span>
+                    </a>
+                    <a href="{{ route('students.index') }}" class="flex items-center gap-4 px-4 py-3 rounded-lg transition-all duration-300 ease-in-out cursor-pointer {{ Route::is('students.*') ? 'text-primary font-bold border-r-4 border-primary bg-surface-bright shadow-sm' : 'text-on-surface-variant hover:text-on-surface hover:bg-tertiary-fixed' }}">
+                        <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' {{ Route::is('students.*') ? '1' : '0' }};">school</span>
+                        <span class="text-label-lg font-label-lg">{{ __('Student Directory') }}</span>
+                    </a>
+                @endif
                 
                 <form action="{{ route('logout') }}" method="POST" class="mt-auto">
                     @csrf
@@ -163,10 +182,12 @@
                 <h1 class="text-headline-md font-headline-md text-primary tracking-tight">{{ __('Academic Portal') }}</h1>
                 <div class="flex items-center gap-6">
                     <div class="relative">
+                        @unless(optional(Auth::user())->isStudent())
                         <form action="{{ route('students.index') }}" method="GET">
                             <input class="bg-transparent border-0 border-b border-outline-variant px-2 py-1 text-body-md font-body-md focus:outline-none focus:border-primary w-64 placeholder-on-surface-variant transition-colors" name="search" value="{{ request('search') }}" placeholder="{{ __('Search students...') }}" type="text"/>
                             <button type="submit" class="material-symbols-outlined absolute right-0 top-1/2 -translate-y-1/2 text-on-surface-variant hover:text-primary transition-colors">search</button>
                         </form>
+                        @endunless
                     </div>
 
                     <div class="flex items-center gap-3 border-r border-outline-variant pr-6">
@@ -185,6 +206,17 @@
             </header>
 
             <div class="flex-1 p-margin-mobile md:p-margin-desktop overflow-y-auto">
+                @if (session('success'))
+                    <div class="mb-4 p-4 bg-primary-container text-on-primary-container border border-primary rounded-sm text-body-md font-body-md">
+                        {{ session('success') }}
+                    </div>
+                @endif
+                @if (session('error'))
+                    <div class="mb-4 p-4 bg-error-container text-on-error-container border border-error rounded-sm text-body-md font-body-md">
+                        {{ session('error') }}
+                    </div>
+                @endif
+
                 @yield('content')
             </div>
         </main>
