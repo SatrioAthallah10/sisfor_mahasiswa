@@ -78,8 +78,11 @@ class StudentController extends Controller
         $student = Student::findOrFail($id);
         $validated = $request->validated();
 
-        $photoPath = $this->handlePhotoUpload($request, $student->photo_path);
-        $validated['photo_path'] = $photoPath;
+        try {
+            $validated['photo_path'] = $this->handlePhotoUpload($request, $student->photo_path);
+        } catch (\Throwable $e) {
+            return redirect()->back()->withInput()->with('error', __('Photo upload failed. Please try again.'));
+        }
 
         $student->update($validated);
 
@@ -102,7 +105,9 @@ class StudentController extends Controller
 
         $filename = Str::uuid().'.'.$request->file('photo')->getClientOriginalExtension();
 
-        $request->file('photo')->storeAs('photos', $filename, 'public');
+        if (!$path) {
+            throw new \RuntimeException('Failed to store uploaded photo.');
+        }
 
         if ($oldPath) {
             Storage::disk('public')->delete($oldPath);
