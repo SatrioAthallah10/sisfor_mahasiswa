@@ -11,7 +11,7 @@ class DashboardController extends Controller
     {
         $totalStudents = Student::count();
         $averageGpa = round(Student::avg('gpa') ?? 0, 2);
-        
+
         $studentsByProdi = Student::selectRaw('prodi, COUNT(*) as total')
             ->groupBy('prodi')
             ->orderByDesc('total')

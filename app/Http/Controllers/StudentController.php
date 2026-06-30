@@ -17,9 +17,9 @@ class StudentController extends Controller
         $query = Student::query();
 
         if ($search = $request->input('search')) {
-            $query->where(function($q) use ($search) {
+            $query->where(function ($q) use ($search) {
                 $q->where('name', 'like', '%'.$search.'%')
-                  ->orWhere('nim', 'like', '%'.$search.'%');
+                    ->orWhere('nim', 'like', '%'.$search.'%');
             });
         }
 
@@ -36,7 +36,7 @@ class StudentController extends Controller
         }
 
         $students = $query->paginate(10)->appends($request->query());
-        
+
         $prodis = Student::distinct()->pluck('prodi');
 
         return view('students.index', compact('students', 'prodis'));
@@ -50,7 +50,7 @@ class StudentController extends Controller
     public function store(StudentRequest $request): RedirectResponse
     {
         $validated = $request->validated();
-        
+
         $photoPath = $this->handlePhotoUpload($request, null);
         $validated['photo_path'] = $photoPath;
 
@@ -96,11 +96,11 @@ class StudentController extends Controller
 
     private function handlePhotoUpload(Request $request, ?string $oldPath): ?string
     {
-        if (!$request->hasFile('photo')) {
+        if (! $request->hasFile('photo')) {
             return $oldPath;
         }
 
-        $filename = Str::uuid() . '.' . $request->file('photo')->getClientOriginalExtension();
+        $filename = Str::uuid().'.'.$request->file('photo')->getClientOriginalExtension();
 
         $request->file('photo')->storeAs('photos', $filename, 'public');
 
@@ -108,6 +108,6 @@ class StudentController extends Controller
             Storage::disk('public')->delete($oldPath);
         }
 
-        return 'photos/' . $filename;
+        return 'photos/'.$filename;
     }
 }

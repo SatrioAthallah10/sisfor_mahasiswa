@@ -11,12 +11,12 @@ class ExportController extends Controller
     {
         $headers = [
             'Content-Type' => 'text/csv',
-            'Content-Disposition' => 'attachment; filename="students_' . date('Ymd') . '.csv"',
+            'Content-Disposition' => 'attachment; filename="students_'.date('Ymd').'.csv"',
         ];
 
         return response()->stream(function () {
             $handle = fopen('php://output', 'w');
-            
+
             fputcsv($handle, ['NIM', 'Name', 'Study Program', 'GPA', 'Photo', 'Created At']);
 
             Student::select('nim', 'name', 'prodi', 'gpa', 'photo_path', 'created_at')
@@ -28,7 +28,7 @@ class ExportController extends Controller
                             $row->prodi,
                             $row->gpa,
                             $row->photo_path ?? '',
-                            $row->created_at
+                            $row->created_at,
                         ]);
                     }
                 });
