@@ -14,6 +14,7 @@ class AttendanceSession extends Model
         'open_at',
         'close_at',
         'created_by',
+        'course_id',
     ];
 
     protected $casts = [
@@ -24,5 +25,10 @@ class AttendanceSession extends Model
     public function records()
     {
         return $this->hasMany(AttendanceRecord::class);
+    }
+
+    public function course()
+    {
+        return $this->belongsTo(Course::class);
     }
 }

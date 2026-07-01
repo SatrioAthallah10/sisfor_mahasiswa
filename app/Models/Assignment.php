@@ -17,6 +17,7 @@ class Assignment extends Model
         'available_from',
         'due_at',
         'created_by',
+        'course_id',
     ];
 
     protected $casts = [
@@ -27,5 +28,10 @@ class Assignment extends Model
     public function submissions()
     {
         return $this->hasMany(Submission::class);
+    }
+
+    public function course()
+    {
+        return $this->belongsTo(Course::class);
     }
 }

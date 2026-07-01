@@ -151,9 +151,21 @@
                         <span class="text-label-lg font-label-lg">{{ __('Profile') }}</span>
                     </a>
                 @elseif(Auth::user()->role === 'dosen')
-                    <a href="{{ route('dashboard') }}" class="flex items-center gap-4 px-4 py-3 rounded-lg transition-all duration-300 ease-in-out cursor-pointer {{ Route::is('dashboard') ? 'text-primary font-bold border-r-4 border-primary bg-surface-bright shadow-sm' : 'text-on-surface-variant hover:text-on-surface hover:bg-tertiary-fixed' }}">
-                        <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' {{ Route::is('dashboard') ? '1' : '0' }};">dashboard</span>
+                    <a href="{{ route('lecturer.dashboard') }}" class="flex items-center gap-4 px-4 py-3 rounded-lg transition-all duration-300 ease-in-out cursor-pointer {{ Route::is('lecturer.dashboard') ? 'text-primary font-bold border-r-4 border-primary bg-surface-bright shadow-sm' : 'text-on-surface-variant hover:text-on-surface hover:bg-tertiary-fixed' }}">
+                        <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' {{ Route::is('lecturer.dashboard') ? '1' : '0' }};">dashboard</span>
                         <span class="text-label-lg font-label-lg">{{ __('Dashboard') }}</span>
+                    </a>
+                    <a href="{{ route('lecturer.courses.index') }}" class="flex items-center gap-4 px-4 py-3 rounded-lg transition-all duration-300 ease-in-out cursor-pointer {{ Route::is('lecturer.courses.*') ? 'text-primary font-bold border-r-4 border-primary bg-surface-bright shadow-sm' : 'text-on-surface-variant hover:text-on-surface hover:bg-tertiary-fixed' }}">
+                        <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' {{ Route::is('lecturer.courses.*') ? '1' : '0' }};">menu_book</span>
+                        <span class="text-label-lg font-label-lg">{{ __('Mata Kuliah') }}</span>
+                    </a>
+                    <a href="{{ route('lecturer.assignments.index') }}" class="flex items-center gap-4 px-4 py-3 rounded-lg transition-all duration-300 ease-in-out cursor-pointer {{ Route::is('lecturer.assignments.*') ? 'text-primary font-bold border-r-4 border-primary bg-surface-bright shadow-sm' : 'text-on-surface-variant hover:text-on-surface hover:bg-tertiary-fixed' }}">
+                        <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' {{ Route::is('lecturer.assignments.*') ? '1' : '0' }};">assignment</span>
+                        <span class="text-label-lg font-label-lg">{{ __('Tugas') }}</span>
+                    </a>
+                    <a href="{{ route('lecturer.attendance.index') }}" class="flex items-center gap-4 px-4 py-3 rounded-lg transition-all duration-300 ease-in-out cursor-pointer {{ Route::is('lecturer.attendance.*') ? 'text-primary font-bold border-r-4 border-primary bg-surface-bright shadow-sm' : 'text-on-surface-variant hover:text-on-surface hover:bg-tertiary-fixed' }}">
+                        <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' {{ Route::is('lecturer.attendance.*') ? '1' : '0' }};">how_to_reg</span>
+                        <span class="text-label-lg font-label-lg">{{ __('Absensi') }}</span>
                     </a>
                     <a href="{{ route('students.index') }}" class="flex items-center gap-4 px-4 py-3 rounded-lg transition-all duration-300 ease-in-out cursor-pointer {{ Route::is('students.*') ? 'text-primary font-bold border-r-4 border-primary bg-surface-bright shadow-sm' : 'text-on-surface-variant hover:text-on-surface hover:bg-tertiary-fixed' }}">
                         <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' {{ Route::is('students.*') ? '1' : '0' }};">school</span>

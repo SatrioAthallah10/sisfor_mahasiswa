@@ -15,10 +15,14 @@ class Submission extends Model
         'file_path',
         'notes',
         'submitted_at',
+        'status',
+        'feedback',
+        'reviewed_at',
     ];
 
     protected $casts = [
         'submitted_at' => 'datetime',
+        'reviewed_at'  => 'datetime',
     ];
 
     public function assignment()

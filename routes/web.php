@@ -32,6 +32,10 @@ Route::get('/dashboard', function () {
         return redirect()->route('student.dashboard');
     }
 
+    if ($user && $user->role === 'dosen') {
+        return redirect()->route('lecturer.dashboard');
+    }
+
     return app(\App\Http\Controllers\DashboardController::class)->index();
 })->name('dashboard')->middleware('auth');
 
@@ -69,4 +73,23 @@ Route::prefix('student')->name('student.')->middleware('auth')->group(function (
 
     Route::get('/profile/edit', [\App\Http\Controllers\StudentPortalController::class, 'editProfile'])->name('profile.edit');
     Route::post('/profile', [\App\Http\Controllers\StudentPortalController::class, 'updateProfile'])->name('profile.update');
+});
+
+// Lecturer portal routes (Dosen)
+Route::prefix('lecturer')->name('lecturer.')->middleware(['auth', 'role:dosen'])->group(function () {
+    Route::get('/', [\App\Http\Controllers\LecturerPortalController::class, 'dashboard'])->name('dashboard');
+
+    Route::get('/courses', [\App\Http\Controllers\LecturerPortalController::class, 'coursesIndex'])->name('courses.index');
+
+    Route::get('/assignments', [\App\Http\Controllers\LecturerPortalController::class, 'assignmentsIndex'])->name('assignments.index');
+    Route::get('/assignments/create', [\App\Http\Controllers\LecturerPortalController::class, 'assignmentsCreate'])->name('assignments.create');
+    Route::post('/assignments', [\App\Http\Controllers\LecturerPortalController::class, 'assignmentsStore'])->name('assignments.store');
+    Route::get('/assignments/{id}/submissions', [\App\Http\Controllers\LecturerPortalController::class, 'submissionsIndex'])->name('assignments.submissions');
+    Route::post('/submissions/{id}/approve', [\App\Http\Controllers\LecturerPortalController::class, 'submissionApprove'])->name('submissions.approve');
+    Route::post('/submissions/{id}/reject', [\App\Http\Controllers\LecturerPortalController::class, 'submissionReject'])->name('submissions.reject');
+
+    Route::get('/attendance', [\App\Http\Controllers\LecturerPortalController::class, 'attendanceIndex'])->name('attendance.index');
+    Route::get('/attendance/{id}/records', [\App\Http\Controllers\LecturerPortalController::class, 'attendanceRecords'])->name('attendance.records');
+    Route::post('/attendance-records/{id}/approve', [\App\Http\Controllers\LecturerPortalController::class, 'attendanceApprove'])->name('attendance.approve');
+    Route::post('/attendance-records/{id}/reject', [\App\Http\Controllers\LecturerPortalController::class, 'attendanceReject'])->name('attendance.reject');
 });

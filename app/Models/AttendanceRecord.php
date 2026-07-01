@@ -14,6 +14,7 @@ class AttendanceRecord extends Model
         'user_id',
         'present_at',
         'metadata',
+        'status',
     ];
 
     protected $casts = [
